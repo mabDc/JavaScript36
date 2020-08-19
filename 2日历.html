@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2_calendar</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        #data {
+            width: 280px;
+            border: 1px solid #000000;
+            margin: 20px auto;
+        }
+
+        #data>p {
+            display: flex;
+        }
+
+        #data>h5 {
+            text-align: center;
+        }
+
+        #data>p>span {
+            padding: 0;
+        }
+
+        #prev,
+        #next {
+            cursor: pointer;
+        }
+
+        #year {
+            flex: 1;
+            text-align: center;
+        }
+
+        #title {
+            overflow: hidden;
+            list-style: none;
+            background: #ccc;
+        }
+
+        #title>li {
+            float: left;
+            width: 40px;
+            height: 26px;
+            line-height: 26px;
+            text-align: center;
+        }
+
+        #date {
+            overflow: hidden;
+            list-style: none;
+        }
+
+        #date>li {
+            float: left;
+            width: 34px;
+            height: 34px;
+            margin: 1px;
+            border: 2px solid rgba(0, 0, 0, 0);
+            line-height: 34px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        #date>li:hover:not(.active) {
+            border: 2px solid #f97;
+        }
+
+        .active {
+            color: red;
+        }
+
+        .last {
+            color: #888;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="data">
+        <p>
+            <span id="prev">上一月</span>
+            <span id="year"></span>
+            <span id="next">下一月</span>
+        </p>
+        <h5 id="month"></h5>
+        <div id="title">
+            <li>日</li>
+            <li>一</li>
+            <li>二</li>
+            <li>三</li>
+            <li>四</li>
+            <li>五</li>
+            <li>六</li>
+        </div>
+        <ul id="date">
+
+        </ul>
+    </div>
+    <script>
+        var date = new Date(); // 保存当前选中的日期
+
+        function freshDate() {
+            const monthNames = [
+                "一月", "二月", "三月", "四月", "五月", "六月",
+                "七月", "八月", "九月", "十月", "十一月", "十二月",
+            ];
+            document.querySelector("#year").innerHTML = date.getFullYear();
+            document.querySelector("#month").innerHTML = monthNames[date.getMonth()];
+
+            let day = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+            let days = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+            let lastDays = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
+            let html = "";
+            for (let i = 0; i < day; i++) {
+                html += `<li class="last">${lastDays - (day - i - 1)}</li>`;
+            }
+            for (let i = 0; i < days; i++) {
+                html += `<li>${i + 1}</li>`;
+            }
+            document.querySelector("#date").innerHTML = html;
+            document.querySelectorAll("#date li").forEach(li => li.addEventListener("click", (e) => {
+                let active = document.querySelector(".active");
+                if (active) {
+                    active.classList.remove("active");
+                }
+                e.target.classList.add("active")
+            }));
+        }
+
+        freshDate();
+        // 今天加标志
+        let day = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
+        document.querySelector("#date li:nth-child(" + (day + date.getDate()) + ")").classList.add("active");
+
+        document.querySelector("#prev").addEventListener("click", (e) => {
+            date = new Date(date.getFullYear(), date.getMonth() - 1);
+            freshDate()
+        });
+        document.querySelector("#next").addEventListener("click", (e) => {
+            date = new Date(date.getFullYear(), date.getMonth() + 1);
+            freshDate()
+        });
+
+    </script>
+</body>
+
+</html>

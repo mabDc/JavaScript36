@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1 simple calc</title>
+    <style>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <input type="number" id="num1" />
+        <select name="" id="type">
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">*</option>
+            <option value="/">/</option>
+            <option value="%">%</option>
+        </select>
+        <input type="number" id="num2" />
+        <input type="button" id="btn" value="cal" />
+    </div>
+    <p id="res">please input number</p>
+    <script>
+        document.querySelector("#btn").addEventListener("click", (e) => {
+            let num1 = +document.querySelector("#num1").value;
+            let num2 = +document.querySelector("#num2").value;
+            let type = document.querySelector("#type").value;
+            let res;
+            switch (type) {
+                case "+":
+                    res = num1 + num2;
+                    break;
+                case "-":
+                    res = num1 - num2;
+                    break;
+                case "*":
+                    res = num1 * num2;
+                    break;
+                case "/":
+                    res = num1 / num2;
+                    break;
+                case "%":
+                    res = num1 % num2;
+                    break;
+                default:
+                    break;
+            }
+            document.querySelector("#res").innerHTML = res;
+        })
+    </script>
+</body>
+
+</html>
