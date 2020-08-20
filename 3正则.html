@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3正则</title>
+</head>
+
+<body>
+    <div>
+        <h2>在线正则表达式测试</h2>
+        <textarea name="text" id="text" cols="80" rows="10" placeholder="在此输入待匹配文本"></textarea>
+    </div>
+    <div>
+        正则表达式
+        <input type="text" id="regexp" placeholder="在此输入正则表达式">
+        <input type="checkbox" name="globalflag" id="globalflag" checked>
+        <label for="globaltag">全局搜索</label>
+        <input type="checkbox" name="caseflag" id="caseflag">
+        <label for="caseflag">忽略大小写</label>
+        <input type="button" value="测试匹配" id="test">
+    </div>
+    <div>
+        <h5>匹配结果</h5>
+        <textarea name="matchtext" id="matchtext" cols="80" rows="10" placeholder="" disabled></textarea>
+    </div>
+    <div>
+        替换文本
+        <input type="text" id="replacement" placeholder="在此输入替换文本">
+        <input type="button" value="替换" id="replace">
+    </div>
+    <div>
+        <h5>替换结果</h5>
+        <textarea name="replacetext" id="replacetext" cols="80" rows="10" placeholder="" disabled></textarea>
+    </div>
+
+    <script>
+        function byId(id) {
+            return document.getElementById(id);
+        }
+
+        function getRegExp() {
+            let globalflag = byId("globalflag").checked && "g" || "";
+            let caseflag = byId("caseflag").checked && "i" || "";
+            return new RegExp(byId("regexp").value, globalflag + caseflag);
+        }
+
+        byId("test").addEventListener("click", (e) => {
+            let r = byId("text").value.match(getRegExp());
+            if (r === null) {
+                byId("matchtext").value = "（没有匹配）";
+                return;
+            }
+
+            let index = r.index;
+            if (index === undefined) {
+                byId("matchtext").value = "共找到 " + r.length + " 处匹配：\n" + r.join("\n");
+                return;
+            }
+            byId("matchtext").value = "匹配位置：" + index + "\n匹配结果：" + r[0];
+        });
+
+        byId("replace").addEventListener("click", (e) => {
+            byId("replacetext").value = byId("text").value.replace(getRegExp(), byId("replacement").value);
+        });
+    </script>
+</body>
+
+</html>
