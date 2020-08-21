@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4小饼干</title>
+    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/Cookies.js/1.2.1/cookies.js"></script> -->
+    <script src="js/cookies.js"></script>
+</head>
+
+<body>
+    <h2>使用cookie保存用户颜色设置</h2>
+    <p>
+        <input type="button" value="设置背景色" id="setbackgroundcolor">
+        当前颜色：<span id="backgroundcolor">#FFF</span>
+    </p>
+    <p>
+        <input type="button" value="设置字体色" id="setfontcolor">
+        当前颜色：<span id="fontcolor">#000</span>
+    </p>
+
+    <script>
+        const kBackgroundColor = "backgroundcolor";
+        const kFontColor = "fontcolor";
+
+        function byId(id) {
+            return document.getElementById(id);
+        }
+
+        function setBackgroundColor(color) {
+            document.body.style.backgroundColor = color;
+            byId("backgroundcolor").innerHTML = color;
+            Cookies.set(kBackgroundColor, color);
+        }
+
+        function setFontColor(color) {
+            document.body.style.color = color;
+            byId("fontcolor").innerHTML = color;
+            Cookies.set(kFontColor, color);
+        }
+
+        byId("setbackgroundcolor").addEventListener('click', (e) => {
+            let color = window.prompt("请输入背景颜色");
+            if (!color) return;
+            setBackgroundColor(color);
+        });
+
+        byId("setfontcolor").addEventListener('click', (e) => {
+            let color = window.prompt("请输入字体颜色");
+            if (!color) return;
+            setFontColor(color);
+        });
+
+        (() => {
+            let backgroundColor = Cookies.get(kBackgroundColor);
+            if (backgroundColor) {
+                setBackgroundColor(backgroundColor);
+            }
+            let fontColor = Cookies.get(kFontColor);
+            if (fontColor) {
+                setFontColor(fontColor);
+            }
+        })();
+    </script>
+
+</body>
+
+</html>

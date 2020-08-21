@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10角色扮演模型键盘事件</title>
+    <style>
+        #rabbit {
+            position: absolute;
+            left: calc(50% - 75px);
+            top: calc(50% - 75px);
+        }
+    </style>
+</head>
+
+<body>
+    <img src="img/rabbit.png" alt="rabbit" id="rabbit">
+
+    <script>
+
+        function moveX(x) {
+            let rabbiit = document.querySelector("#rabbit");
+            rabbiit.style.left = rabbiit.offsetLeft + 20 * x + "px";
+        }
+
+        function moveY(y) {
+            let rabbiit = document.querySelector("#rabbit");
+            rabbiit.style.top = rabbiit.offsetTop + 20 * y + "px";
+        }
+
+        document.body.addEventListener('keydown', (e) => {
+            var event = e || window.event;
+            switch (e.keyCode) {
+                // space
+                case 32:
+                    console.log('space')
+                    break;
+                // left
+                case 'A'.charCodeAt():
+                case 37:
+                    moveX(-1);
+                    break;
+                // up
+                case 'W'.charCodeAt():
+                case 38:
+                    moveY(-1);
+                    break;
+                // right
+                case 'D'.charCodeAt():
+                case 39:
+                    moveX(1);
+                    break;
+                // down
+                case 'S'.charCodeAt():
+                case 40:
+                    moveY(1);
+                    break;
+                default:
+                    break;
+            }
+        });
+    </script>
+</body>
+
+</html>
