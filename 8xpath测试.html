@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8xpath测试</title>
+    <style>
+        textarea {
+            background-color: #FAFAFA;
+        }
+
+        .float {
+            float: left;
+            margin-right: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h3>
+        标准看这里：
+        <a href="https://www.w3.org/TR/xpath/">XPATH</a>
+    </h3>
+    <div>
+        表达式：
+        <input type="text" placeholder="请输入xpath" id="xpath">
+    </div>
+    <div>
+        <div class="float">
+            <h3>xml</h3>
+            <textarea name="xml" id="xml" cols="50" rows="40"></textarea>
+        </div>
+        <div class="float">
+            <h3>结果</h3>
+            <textarea name="r" id="r" cols="40" rows="40"></textarea>
+        </div>
+        <!-- <div class="float">
+            <h3>路径</h3>
+            <textarea name="path" id="path" cols="40" rows="40"></textarea>
+        </div> -->
+    </div>
+
+    <script>
+        Object.prototype.toJSONString = function () {
+            return JSON.stringify(this, null, 2);
+        }
+
+        function search() {
+            let parser = new DOMParser();
+            let xml = parser.parseFromString(document.querySelector("#xml").value, 'text/html');
+            let xpath = document.querySelector("#xpath").value;
+            let r = xml.evaluate(xpath, xml, null, XPathResult.ANY_TYPE, null);
+            /**
+             *  @type {Node|Element}
+             */
+            let node, nodes = [];
+            while (node = r.iterateNext())
+                nodes.push(node.outerHtml || node.textContent);
+            document.querySelector("#r").value = nodes.toJSONString();
+        }
+
+        document.querySelector("#xpath").addEventListener('input', (e) => {
+            search();
+        });
+
+        (() => {
+            let xml = `
+<li class="fed-col-xs6 fed-col-md3 fed-part-eone website-padding-right-1">
+    <span class="fed-text-muted">
+        作者
+    </span>
+    梦中笔丶 
+</li> `;
+            document.querySelector("#xml").value = xml;
+            let xpath = "//li//text()";
+            document.querySelector("#xpath").value = xpath;
+            search();
+        })();
+    </script>
+</body>
+
+</html>
