@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5webworkers</title>
+</head>
+
+<body>
+    <h3>web worker 计时器</h3>
+    <input type="button" value="开始" id="start">
+    <input type="button" value="结束" id="stop">
+    <p>
+        计时：<span id="time">0</span>
+    </p>
+
+    <script>
+        /**
+         * @type {Worker}
+         */
+        let woker;
+        let blob = new Blob([`
+var i = 0;
+setInterval(() => {
+    i = i + 1;
+    postMessage(i);
+}, 100);`]);
+        document.querySelector("#start").addEventListener('click', () => {
+            var blobURL = window.URL.createObjectURL(blob);
+            woker = new Worker(blobURL);
+            woker.onmessage = function (e) {
+                let ps = e.data % 10;
+                document.querySelector("#time").innerHTML = (e.data - ps) / 10 + "." + ps + "s"
+            }
+        });
+        document.querySelector("#stop").addEventListener('click', () => {
+            if (woker !== undefined) {
+                woker.terminate();
+            }
+        });
+    </script>
+</body>
+
+</html>
