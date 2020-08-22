@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7jsonpath测试</title>
+    <script src="js/jsonpath-0.8.0.js"></script>
+    <style>
+        textarea {
+            background-color: #FAFAFA;
+        }
+
+        .float {
+            float: left;
+            margin-right: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h3>
+        标准看这里：
+        <a href="https://goessner.net/articles/JsonPath/"># JSONPath - XPath for JSON</a>
+    </h3>
+    <div>
+        表达式：
+        <input type="text" placeholder="请输入jsonpath" id="jsonpath">
+    </div>
+    <div>
+        <div class="float">
+            <h3>JSON内容</h3>
+            <textarea name="json" id="json" cols="50" rows="40"></textarea>
+        </div>
+        <div class="float">
+            <h3>结果</h3>
+            <textarea name="r" id="r" cols="40" rows="40"></textarea>
+        </div>
+        <div class="float">
+            <h3>路径</h3>
+            <textarea name="path" id="path" cols="40" rows="40"></textarea>
+        </div>
+    </div>
+
+    <script>
+        Object.prototype.toJSONString = function () {
+            if (this == false) {
+                return "内容为空"
+            }
+            return JSON.stringify(this, null, 2);
+        }
+
+        function search() {
+            let jsonpath = document.querySelector('#jsonpath').value;
+            let o = JSON.parse(document.querySelector("#json").value);
+            document.querySelector('#r').value = jsonPath(o, jsonpath).toJSONString();
+            document.querySelector('#path').value = jsonPath(o, jsonpath, { resultType: "PATH" }).toJSONString();
+        }
+
+        document.querySelector("#jsonpath").addEventListener('input', (e) => {
+            search();
+        });
+
+        (() => {
+            let json = {
+                "store": {
+                    "book": [
+                        {
+                            "category": "reference",
+                            "author": "Nigel Rees",
+                            "title": "Sayings of the Century",
+                            "price": 8.95
+                        },
+                        {
+                            "category": "fiction",
+                            "author": "Evelyn Waugh",
+                            "title": "Sword of Honour",
+                            "price": 12.99
+                        },
+                        {
+                            "category": "fiction",
+                            "author": "Herman Melville",
+                            "title": "Moby Dick",
+                            "isbn": "0-553-21311-3",
+                            "price": 8.99
+                        },
+                        {
+                            "category": "fiction",
+                            "author": "J. R. R. Tolkien",
+                            "title": "The Lord of the Rings",
+                            "isbn": "0-395-19395-8",
+                            "price": 22.99
+                        }
+                    ],
+                    "bicycle": {
+                        "color": "red",
+                        "price": 19.95
+                    }
+                }
+            };
+            document.querySelector("#json").value = json.toJSONString();
+            let jsonpath = "$..[?(@.price)]";
+            document.querySelector("#jsonpath").value = jsonpath;
+            search();
+        })();
+    </script>
+</body>
+
+</html>
